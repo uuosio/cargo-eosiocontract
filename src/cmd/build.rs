@@ -237,7 +237,11 @@ fn exec_cargo_for_wasm_target(
     // Currently will override user defined RUSTFLAGS from .cargo/config. See https://github.com/paritytech/cargo-contract/issues/98.
     std::env::set_var(
         "RUSTFLAGS",
-        "-C link-arg=-zstack-size=65536 -C link-arg=--import-memory",
+        "-C link-arg=-zstack-size=65536 -C link-arg=--import-memory -C target-feature=+simd128",
+        // `multivalue` doesn't work currently due to this issue in rustc:
+        // https://github.com/rust-lang/rust/issues/73755
+        //
+        //"-C link-arg=-zstack-size=65536 -C link-arg=--import-memory -C target-feature=+multivalue",
     );
 
     let cargo_build = |manifest_path: &ManifestPath| {
@@ -356,6 +360,11 @@ fn load_module<P: AsRef<Path>>(path: P) -> Result<Module> {
 
 /// Performs required post-processing steps on the wasm artifact.
 fn post_process_wasm(crate_metadata: &CrateMetadata) -> Result<()> {
+    // We temporarily deactivate post processing, since `parity-wasm` doesn't support
+    // loading a Wasm blob which contains `simd128` instructions.
+    std::fs::rename(&crate_metadata.original_wasm, &crate_metadata.dest_wasm)?;
+    return Ok(());
+
     // Deserialize wasm module from a file.
     let mut module =
         load_module(&crate_metadata.original_wasm).context("Loading of original wasm failed")?;
@@ -436,7 +445,6 @@ fn do_optimization(
             We use this tool to optimize the size of your contract's Wasm binary.\n\n\
             wasm-opt is part of the binaryen package. You can find detailed\n\
             installation instructions on https://github.com/WebAssembly/binaryen#tools.\n\n\
-
             There are ready-to-install packages for many platforms:\n\
             * Debian/Ubuntu: apt-get install binaryen\n\
             * Homebrew: brew install binaryen\n\
@@ -464,6 +472,7 @@ fn do_optimization(
         .arg(format!("-O{}", optimization_level))
         .arg("-o")
         .arg(dest_optimized)
+        .arg("--enable-simd")
         // the memory in our module is imported, `wasm-opt` needs to be told that
         // the memory is initialized to zeroes, otherwise it won't run the
         // memory-packing pre-pass.
