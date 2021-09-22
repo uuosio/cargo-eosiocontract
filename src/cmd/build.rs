@@ -24,7 +24,6 @@ use crate::{
 use anyhow::{Context, Result};
 use colored::Colorize;
 use parity_wasm::elements::{External, Internal, MemoryType, Module, Section};
-use regex::Regex;
 use semver::Version;
 use std::{
     convert::TryFrom,
@@ -531,24 +530,17 @@ fn check_wasm_opt_version_compatibility(wasm_opt_path: &Path) -> Result<()> {
     let version_stdout = str::from_utf8(&cmd.stdout)
         .expect("Cannot convert stdout output of wasm-opt to string")
         .trim();
-    let re = Regex::new(r"wasm-opt version (\d+)").expect("invalid regex");
-    let captures = re.captures(version_stdout).ok_or_else(|| {
-        anyhow::anyhow!(
+    let parts = version_stdout.split(" ").collect::<Vec<_>>();
+
+    if parts.len() < 3 || parts[0] != "wasm-opt" || parts[1] != "version" {
+        return Err(anyhow::anyhow!(
             "Unable to extract version information from '{}'.\n\
             Your wasm-opt version is most probably too old. Make sure you use a version >= 99.{}",
             version_stdout,
             github_note,
-        )
-    })?;
-    let version_number: u32 = captures
-        .get(1) // first capture group is at index 1
-        .ok_or_else(|| {
-            anyhow::anyhow!(
-                "Unable to extract version number from '{:?}'",
-                version_stdout
-            )
-        })?
-        .as_str()
+        ))
+    };
+    let version_number: u32 = parts[2]
         .parse()
         .map_err(|err| {
             anyhow::anyhow!(
