@@ -251,7 +251,7 @@ fn exec_cargo_for_wasm_target(
     // Currently will override user defined RUSTFLAGS from .cargo/config. See https://github.com/paritytech/cargo-contract/issues/98.
     std::env::set_var(
         "RUSTFLAGS",
-        "-C link-arg=-zstack-size=65536 -C link-arg=--import-memory -Clinker-plugin-lto",
+        "-C link-arg=-zstack-size=8192 -Clinker-plugin-lto",
     );
 
     let cargo_build = |manifest_path: &ManifestPath| {
@@ -379,7 +379,7 @@ fn post_process_wasm(crate_metadata: &CrateMetadata) -> Result<()> {
         load_module(&crate_metadata.original_wasm).context("Loading of original wasm failed")?;
 
     strip_exports(&mut module);
-    ensure_maximum_memory_pages(&mut module, MAX_MEMORY_PAGES)?;
+    //ensure_maximum_memory_pages(&mut module, MAX_MEMORY_PAGES)?;
     strip_custom_sections(&mut module);
 
     validate_wasm::validate_import_section(&module)?;
