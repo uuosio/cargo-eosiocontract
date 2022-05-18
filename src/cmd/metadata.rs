@@ -69,7 +69,7 @@ pub(crate) fn execute(
     let target_directory = crate_metadata.target_directory.clone();
     let out_path_metadata = target_directory.join(METADATA_FILE);
 
-    let fname_bundle = format!("{}.contract", crate_metadata.contract_artifact_name);
+    let fname_bundle = format!("{}.abi", crate_metadata.contract_artifact_name);
     let out_path_bundle = target_directory.join(fname_bundle);
 
     // build the extended contract project metadata
@@ -110,18 +110,18 @@ pub(crate) fn execute(
             // let contents = serde_json::to_string_pretty(&metadata)?;
             let v3 = ink_meta.clone().get("V3").unwrap().clone();
             let contents = serde_json::to_string_pretty(&v3)?;
-            fs::write(&out_path_metadata, contents)?;
+            fs::write(&out_path_bundle, contents)?;
             current_progress += 1;
         }
 
-        maybe_println!(
-            verbosity,
-            " {} {}",
-            format!("[{}/{}]", current_progress, total_steps).bold(),
-            "Generating bundle".bright_green().bold()
-        );
-        let contents = serde_json::to_string(&metadata)?;
-        fs::write(&out_path_bundle, contents)?;
+        // maybe_println!(
+        //     verbosity,
+        //     " {} {}",
+        //     format!("[{}/{}]", current_progress, total_steps).bold(),
+        //     "Generating bundle".bright_green().bold()
+        // );
+        // let contents = serde_json::to_string_pretty(&metadata)?;
+        // fs::write(&out_path_bundle, contents)?;
 
         Ok(())
     };

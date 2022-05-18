@@ -378,7 +378,7 @@ fn post_process_wasm(crate_metadata: &CrateMetadata) -> Result<()> {
     let mut module =
         load_module(&crate_metadata.original_wasm).context("Loading of original wasm failed")?;
 
-    strip_exports(&mut module);
+    // strip_exports(&mut module);
     //ensure_maximum_memory_pages(&mut module, MAX_MEMORY_PAGES)?;
     strip_custom_sections(&mut module);
 
