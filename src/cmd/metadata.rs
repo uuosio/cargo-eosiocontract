@@ -103,11 +103,13 @@ pub(crate) fn execute(
         )?;
 
         let ink_meta: serde_json::Map<String, serde_json::Value> = serde_json::from_slice(&stdout)?;
-        let metadata = ContractMetadata::new(source, contract, user, ink_meta);
+        let metadata = ContractMetadata::new(source, contract, user, ink_meta.clone());
         {
             let mut metadata = metadata.clone();
             metadata.remove_source_wasm_attribute();
-            let contents = serde_json::to_string_pretty(&metadata)?;
+            // let contents = serde_json::to_string_pretty(&metadata)?;
+            let v3 = ink_meta.clone().get("V3").unwrap().clone();
+            let contents = serde_json::to_string_pretty(&v3)?;
             fs::write(&out_path_metadata, contents)?;
             current_progress += 1;
         }

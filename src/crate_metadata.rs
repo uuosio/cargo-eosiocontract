@@ -79,7 +79,7 @@ impl CrateMetadata {
             .packages
             .iter()
             .find_map(|package| {
-                if package.name == "ink_lang" {
+                if package.name == "eosio_chain" {
                     Some(
                         Version::parse(&package.version.to_string())
                             .expect("Invalid ink_lang version string"),

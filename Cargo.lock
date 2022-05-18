@@ -488,7 +488,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "cargo-contract"
+name = "cargo-eosiocontract"
 version = "0.17.0"
 dependencies = [
  "anyhow",
@@ -2876,6 +2876,7 @@ version = "1.0.78"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d23c1ba4cf0efd44be32017709280b32d1cea5c3f1275c3b6d9e8bc54f758085"
 dependencies = [
+ "indexmap",
  "itoa 1.0.1",
  "ryu",
  "serde",
