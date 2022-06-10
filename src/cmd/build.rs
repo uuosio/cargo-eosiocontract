@@ -613,7 +613,7 @@ fn assert_compatible_ink_dependencies(
     manifest_path: &ManifestPath,
     verbosity: Verbosity,
 ) -> Result<()> {
-    for dependency in ["parity-scale-codec", "scale-info"].iter() {
+    for dependency in ["parity-scale-codec", "eosio-scale-info"].iter() {
         let args = ["-i", dependency, "--duplicates"];
         let _ = util::invoke_cargo("tree", &args, manifest_path.directory(), verbosity).map_err(
             |_| {

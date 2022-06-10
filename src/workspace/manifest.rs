@@ -490,16 +490,16 @@ impl Manifest {
                 .as_str()
                 .ok_or_else(|| anyhow::anyhow!("[package] name should be a string"))?;
 
-            let ink_metadata = self
+            let eosio_metadata = self
                 .toml
                 .get("dependencies")
                 .ok_or_else(|| anyhow::anyhow!("[dependencies] section not found"))?
-                .get("ink_metadata")
-                .ok_or_else(|| anyhow::anyhow!("ink_metadata dependency not found"))?
+                .get("eosio_metadata")
+                .ok_or_else(|| anyhow::anyhow!("eosio_metadata dependency not found"))?
                 .as_table()
-                .ok_or_else(|| anyhow::anyhow!("ink_metadata dependency should be a table"))?;
+                .ok_or_else(|| anyhow::anyhow!("eosio_metadata dependency should be a table"))?;
 
-            metadata::generate_package(dir, contract_package_name, ink_metadata.clone())?;
+            metadata::generate_package(dir, contract_package_name, eosio_metadata.clone())?;
         }
 
         let updated_toml = toml::to_string(&self.toml)?;

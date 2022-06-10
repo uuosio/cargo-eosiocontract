@@ -28,7 +28,7 @@ use toml::value;
 pub(super) fn generate_package<P: AsRef<Path>>(
     target_dir: P,
     contract_package_name: &str,
-    mut ink_metadata_dependency: value::Table,
+    mut eosio_metadata_dependency: value::Table,
 ) -> Result<()> {
     let dir = target_dir.as_ref();
     log::debug!(
@@ -55,13 +55,13 @@ pub(super) fn generate_package<P: AsRef<Path>>(
         .expect("contract dependency is a table specified in the template");
     contract.insert("package".into(), contract_package_name.into());
 
-    // make ink_metadata dependency use default features
-    ink_metadata_dependency.remove("default-features");
-    ink_metadata_dependency.remove("features");
-    ink_metadata_dependency.remove("optional");
+    // make eosio_metadata dependency use default features
+    eosio_metadata_dependency.remove("default-features");
+    eosio_metadata_dependency.remove("features");
+    eosio_metadata_dependency.remove("optional");
 
     // add ink dependencies copied from contract manifest
-    deps.insert("ink_metadata".into(), ink_metadata_dependency.into());
+    deps.insert("eosio_metadata".into(), eosio_metadata_dependency.into());
     let cargo_toml = toml::to_string(&cargo_toml)?;
 
     fs::write(dir.join("Cargo.toml"), cargo_toml)?;
