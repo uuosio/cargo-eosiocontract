@@ -258,7 +258,7 @@ fn exec_cargo_for_wasm_target(
         let target_dir = &crate_metadata.target_directory;
         let target_dir = format!("--target-dir={}", target_dir.to_string_lossy());
         let mut args = vec![
-            "--target=wasm32-unknown-unknown",
+            "--target=wasm32-wasi",
             "-Zbuild-std",
             "--no-default-features",
             "--release",

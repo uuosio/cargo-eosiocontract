@@ -65,7 +65,7 @@ impl CrateMetadata {
 
         // {target_dir}/wasm32-unknown-unknown/release/{lib_name}.wasm
         let mut original_wasm = target_directory.clone();
-        original_wasm.push("wasm32-unknown-unknown");
+        original_wasm.push("wasm32-wasi");
         original_wasm.push("release");
         original_wasm.push(lib_name.clone());
         original_wasm.set_extension("wasm");
