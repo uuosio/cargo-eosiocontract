@@ -268,7 +268,7 @@ fn exec_cargo_for_wasm_target(
             args.push("--offline");
         }
         if build_mode == BuildMode::Debug {
-            args.push("--features=ink_env/ink-debug");
+            // args.push("--features=ink_env/ink-debug");
         } else {
             args.push("-Zbuild-std-features=panic_immediate_abort");
         }
@@ -633,13 +633,13 @@ fn assert_compatible_ink_dependencies(
 ///
 /// This feature was introduced in `3.0.0-rc4` with `ink_env/ink-debug`.
 pub fn assert_debug_mode_supported(ink_version: &Version) -> anyhow::Result<()> {
-    log::info!("Contract version: {:?}", ink_version);
-    let minimum_version = Version::parse("3.0.0-rc4").expect("parsing version failed");
-    if ink_version < &minimum_version {
-        anyhow::bail!(
-            "Building the contract in debug mode requires an ink! version newer than `3.0.0-rc3`!"
-        );
-    }
+    // log::info!("Contract version: {:?}", ink_version);
+    // let minimum_version = Version::parse("3.0.0-rc4").expect("parsing version failed");
+    // if ink_version < &minimum_version {
+    //     anyhow::bail!(
+    //         "Building the contract in debug mode requires an ink! version newer than `3.0.0-rc3`!"
+    //     );
+    // }
     Ok(())
 }
 
