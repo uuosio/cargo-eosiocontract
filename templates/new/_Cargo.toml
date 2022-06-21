@@ -6,13 +6,6 @@ edition = "2021"
 rust-version = "1.56.1"
 
 [dependencies]
-eosio_metadata = { version = "3.0.0-rc8", default-features = false, features = ["derive"], optional = true }
-ink_env = { version = "3.0.0-rc8", default-features = false }
-ink_storage = { version = "3.0.0-rc8", default-features = false }
-eosio_chain = { version = "3.0.0-rc8", default-features = false }
-
-scale = { package = "parity-scale-codec", version = "2.1", default-features = false, features = ["derive"] }
-eosio-scale-info = { version = "1.0.0", default-features = false, features = ["derive"], optional = true }
 
 [lib]
 name = "{{name}}"
@@ -25,10 +18,4 @@ crate-type = [
 [features]
 default = ["std"]
 std = [
-    "eosio_metadata/std",
-    "ink_env/std",
-    "ink_storage/std",
-    "scale/std",
-    "eosio-scale-info/std",
 ]
-ink-as-dependency = []
