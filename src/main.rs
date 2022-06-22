@@ -418,7 +418,7 @@ impl BuildResult {
         );
         if let Some(metadata_result) = self.metadata_result.as_ref() {
             let bundle = format!(
-                "  - {} (code + metadata)\n",
+                "  - {} (the contract's abi)\n",
                 util::base_name(&metadata_result.dest_bundle).bold()
             );
             out.push_str(&bundle);
@@ -429,13 +429,6 @@ impl BuildResult {
                 util::base_name(dest_wasm).bold()
             );
             out.push_str(&wasm);
-        }
-        if let Some(metadata_result) = self.metadata_result.as_ref() {
-            let metadata = format!(
-                "  - {} (the contract's metadata)",
-                util::base_name(&metadata_result.dest_metadata).bold()
-            );
-            out.push_str(&metadata);
         }
         out
     }
