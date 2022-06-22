@@ -15,6 +15,7 @@ mod {{name}} {
     }
 
     #[chain(main)]
+    #[allow(dead_code)]
     pub struct Contract {
         receiver: Name,
         first_receiver: Name,

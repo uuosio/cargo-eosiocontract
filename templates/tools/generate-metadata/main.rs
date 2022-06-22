@@ -1,7 +1,4 @@
-use std::{fs, path::Path};
-
 extern crate contract;
-
 
 extern "Rust" {
 	pub fn __eosio_generate_abi() -> String;
