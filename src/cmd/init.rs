@@ -29,13 +29,33 @@ use std::collections::HashMap;
 #[structopt(name = "init")]
 pub struct InitCommand {
     /// Path to the Cargo.toml of the contract to build
-    #[structopt(long, parse(from_os_str))]
+    #[structopt(short = "n", long, parse(from_os_str))]
     project_name: Option<PathBuf>,
+}
+
+fn is_dir_name_valid(name: &str) -> bool {
+    if name.len() == 0 {
+        return false;
+    }
+
+    for c in name.as_bytes() {
+        match *c as char {
+            'a'..='z' | 'A'..= 'Z' | '0'..='9' | '_' => {}
+            _ => {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 impl InitCommand {
     pub fn exec(&self) -> Result<()> {
         if let Some(dir) = &self.project_name {
+            if !is_dir_name_valid(dir.to_str().unwrap()) {
+                return Err(anyhow::anyhow!("Invalid project name: {:?}, only characters in [a-zA-Z0-9_] supported", dir));
+            }
+
             fs::create_dir_all(&dir.as_path()).context(format!("Creating directory '{}'", dir.display()))?;
             let mut cargo_toml = include_str!("../../templates/contract/_Cargo.toml");
             let mut lib_rs = include_str!("../../templates/contract/lib.rs");
