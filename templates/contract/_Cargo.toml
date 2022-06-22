@@ -1,0 +1,19 @@
+[package]
+name = "{{name}}"
+version = "0.1.0"
+authors = [""]
+edition = "2021"
+
+[dependencies]
+eosio_chain = { git = "https://github.com/uuosio/rscdk", default-features = false }
+
+[lib]
+name = "{{name}}"
+path = "lib.rs"
+crate-type = ["cdylib"]
+
+[features]
+default = ["std"]
+std = [
+    "eosio_chain/std",
+]

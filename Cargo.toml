@@ -52,6 +52,8 @@ hex = { version = "0.4.3", optional = true }
 
 funty = "2.0.0"
 
+handlebars = "3"
+
 [build-dependencies]
 anyhow = "1.0.53"
 zip = { version = "0.5.13", default-features = false }

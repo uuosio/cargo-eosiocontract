@@ -22,7 +22,7 @@ mod workspace;
 
 use self::workspace::ManifestPath;
 
-use crate::cmd::{metadata::MetadataResult, BuildCommand, CheckCommand, TestCommand};
+use crate::cmd::{metadata::MetadataResult, BuildCommand, CheckCommand, TestCommand, InitCommand};
 
 #[cfg(feature = "extrinsics")]
 use sp_core::{crypto::Pair, sr25519, H256};
@@ -477,6 +477,8 @@ enum Command {
     /// Test the smart contract off-chain
     #[structopt(name = "test")]
     Test(TestCommand),
+    #[structopt(name = "init")]
+    Init(InitCommand),
     /// Upload the smart contract code to the chain
     #[cfg(feature = "extrinsics")]
     #[structopt(name = "deploy")]
@@ -575,6 +577,10 @@ fn exec(cmd: Command) -> Result<Option<String>> {
             } else {
                 Ok(None)
             }
+        }
+        Command::Init(init) => {
+            init.exec()?;
+            Ok(None)
         }
         #[cfg(feature = "extrinsics")]
         Command::Deploy {

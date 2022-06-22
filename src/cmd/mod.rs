@@ -22,9 +22,11 @@ mod instantiate;
 pub mod metadata;
 pub mod new;
 pub mod test;
+pub mod init;
 
 pub(crate) use self::{
     build::{BuildCommand, CheckCommand},
+    init::InitCommand,
     test::TestCommand,
 };
 #[cfg(feature = "extrinsics")]
