@@ -1,21 +1,19 @@
 [package]
 name = "{{name}}"
 version = "0.1.0"
-authors = ["[your_name] <[your_email]>"]
+authors = [""]
 edition = "2021"
-rust-version = "1.56.1"
 
 [dependencies]
+eosio_chain = { version="0.1.0", default-features = false }
 
 [lib]
 name = "{{name}}"
 path = "lib.rs"
-crate-type = [
-	# Used for normal contract Wasm blobs.
-	"cdylib",
-]
+crate-type = ["cdylib"]
 
 [features]
 default = ["std"]
 std = [
+    "eosio_chain/std",
 ]
