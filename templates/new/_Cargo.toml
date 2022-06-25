@@ -5,7 +5,7 @@ authors = [""]
 edition = "2021"
 
 [dependencies]
-eosio_chain = { version="0.1.0", default-features = false }
+eosio-chain = { version="0.1.0", default-features = false }
 
 [lib]
 name = "{{name}}"
@@ -15,5 +15,5 @@ crate-type = ["cdylib"]
 [features]
 default = ["std"]
 std = [
-    "eosio_chain/std",
+    "eosio-chain/std",
 ]

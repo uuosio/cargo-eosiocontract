@@ -37,7 +37,7 @@ mod {{name}} {
             let it = db.find(1u64);
             if let Some(mut value) = it.get_value() {
                 value.count += 1;
-                db.update(it, &value, self.receiver);
+                db.update(&it, &value, self.receiver);
                 eosio_println!("count is", value.count);
             } else {
                 db.store(&Counter{key: 1, count: 1}, self.receiver);
