@@ -79,16 +79,16 @@ impl CrateMetadata {
             .packages
             .iter()
             .find_map(|package| {
-                if package.name == "eosio_chain" {
+                if package.name == "eosio-chain" {
                     Some(
                         Version::parse(&package.version.to_string())
-                            .expect("Invalid ink_lang version string"),
+                            .expect("Invalid eosio-chain version string"),
                     )
                 } else {
                     None
                 }
             })
-            .ok_or_else(|| anyhow::anyhow!("No 'ink_lang' dependency found"))?;
+            .ok_or_else(|| anyhow::anyhow!("No 'eosio-chain' dependency found"))?;
 
         let ExtraMetadata {
             documentation,
