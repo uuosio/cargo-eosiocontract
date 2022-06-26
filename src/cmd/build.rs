@@ -407,18 +407,30 @@ fn optimize_wasm(
         "{}-opt.wasm",
         crate_metadata.contract_artifact_name
     ));
-    let _ = do_optimization(
+
+    if let Err(err) = do_optimization(
         crate_metadata.dest_wasm.as_os_str(),
         dest_optimized.as_os_str(),
         optimization_passes,
         keep_debug_symbols,
-    )?;
-
-    if !dest_optimized.exists() {
-        return Err(anyhow::anyhow!(
-            "Optimization failed, optimized wasm output file `{}` not found.",
-            dest_optimized.display()
-        ));
+    ) {
+        eprintln!(
+            "{} {}",
+            "WARNING:".bright_red().bold(),
+            format!("{:?}", err).bright_red()
+        );
+        if let Err(err) = std::fs::copy(crate_metadata.dest_wasm.as_path(), dest_optimized.as_path()) {
+            anyhow::bail!(
+                "copy from {:?} to {:?} failed: {:?}", crate_metadata.dest_wasm.as_path(), dest_optimized.as_path(), err
+            );
+        }
+    } else {
+        if !dest_optimized.exists() {
+            return Err(anyhow::anyhow!(
+                "Optimization failed, optimized wasm output file `{}` not found.",
+                dest_optimized.display()
+            ));
+        }    
     }
 
     let original_size = metadata(&crate_metadata.dest_wasm)?.len() as f64 / 1000.0;
