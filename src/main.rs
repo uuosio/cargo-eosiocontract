@@ -453,7 +453,7 @@ impl BuildResult {
 #[derive(Debug, StructOpt)]
 enum Command {
     /// Setup and create a new smart contract project
-    #[structopt(name = "new")]
+    #[structopt(name = "init")]
     New {
         /// The name of the newly created smart contract
         name: String,
