@@ -69,8 +69,8 @@ pub struct BuildCommand {
     ///
     /// A production contract should always be build in `release` mode!
     /// Then no debug functionality is compiled into the contract.
-    #[structopt(long = "--release")]
-    build_release: bool,
+    #[structopt(long = "--debug")]
+    build_debug: bool,
     /// Build offline
     #[structopt(long = "--offline")]
     build_offline: bool,
@@ -148,9 +148,9 @@ impl BuildCommand {
             }
         };
 
-        let build_mode = match self.build_release {
-            true => BuildMode::Release,
-            false => BuildMode::Debug,
+        let build_mode = match self.build_debug {
+            true => BuildMode::Debug,
+            false => BuildMode::Release,
         };
 
         let network = match self.build_offline {
@@ -899,7 +899,7 @@ mod tests_ci_only {
             let cmd = BuildCommand {
                 manifest_path: Some(manifest_path.into()),
                 build_artifact: BuildArtifacts::All,
-                build_release: false,
+                build_debug: true,
                 build_offline: false,
                 verbosity: VerbosityFlags::default(),
                 unstable_options: UnstableOptions::default(),
@@ -940,7 +940,7 @@ mod tests_ci_only {
             let cmd = BuildCommand {
                 manifest_path: Some(manifest_path.into()),
                 build_artifact: BuildArtifacts::All,
-                build_release: false,
+                build_debug: true,
                 build_offline: false,
                 verbosity: VerbosityFlags::default(),
                 unstable_options: UnstableOptions::default(),
@@ -1111,7 +1111,7 @@ mod tests_ci_only {
             let cmd = BuildCommand {
                 manifest_path: Some(manifest_path.into()),
                 build_artifact: BuildArtifacts::All,
-                build_release: false,
+                build_debug: true,
                 build_offline: false,
                 verbosity: VerbosityFlags::default(),
                 unstable_options: UnstableOptions::default(),
