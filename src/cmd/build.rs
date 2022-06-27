@@ -52,6 +52,7 @@ pub(crate) struct ExecuteArgs {
     optimization_passes: OptimizationPasses,
     keep_debug_symbols: bool,
     output_type: OutputType,
+    stack_size: u64,
 }
 
 /// Executes build of the smart-contract which produces a wasm binary that is ready for deploying.
@@ -74,6 +75,8 @@ pub struct BuildCommand {
     /// Build offline
     #[structopt(long = "--offline")]
     build_offline: bool,
+    #[structopt(long = "--stack-size", default_value = "8192")]
+    stack_size: u64,
     /// Which build artifacts to generate.
     ///
     /// - `all`: Generate the Wasm, the metadata and a bundled `<name>.contract` file.
@@ -178,6 +181,7 @@ impl BuildCommand {
             optimization_passes,
             keep_debug_symbols: self.keep_debug_symbols,
             output_type,
+            stack_size: self.stack_size,
         };
 
         execute(args)
@@ -213,6 +217,7 @@ impl CheckCommand {
             optimization_passes: OptimizationPasses::Zero,
             keep_debug_symbols: false,
             output_type: OutputType::default(),
+            stack_size: 0,
         };
 
         execute(args)
@@ -244,6 +249,7 @@ fn exec_cargo_for_wasm_target(
     network: Network,
     verbosity: Verbosity,
     unstable_flags: &UnstableFlags,
+    stack_size: u64,
 ) -> Result<()> {
     util::assert_channel()?;
 
@@ -251,7 +257,7 @@ fn exec_cargo_for_wasm_target(
     // Currently will override user defined RUSTFLAGS from .cargo/config. See https://github.com/paritytech/cargo-contract/issues/98.
     std::env::set_var(
         "RUSTFLAGS",
-        "-C link-arg=-zstack-size=8192 -Clinker-plugin-lto",
+        format!("-C link-arg=-zstack-size={} -Clinker-plugin-lto", stack_size),
     );
 
     let cargo_build = |manifest_path: &ManifestPath| {
@@ -669,6 +675,7 @@ pub(crate) fn execute(args: ExecuteArgs) -> Result<BuildResult> {
         optimization_passes,
         keep_debug_symbols,
         output_type,
+        stack_size,
     } = args;
 
     let crate_metadata = CrateMetadata::collect(&manifest_path)?;
@@ -692,6 +699,7 @@ pub(crate) fn execute(args: ExecuteArgs) -> Result<BuildResult> {
             network,
             verbosity,
             &unstable_flags,
+            stack_size,
         )?;
 
         maybe_println!(
@@ -723,6 +731,7 @@ pub(crate) fn execute(args: ExecuteArgs) -> Result<BuildResult> {
                 network,
                 verbosity,
                 &unstable_flags,
+                stack_size,
             )?;
             (None, None)
         }
